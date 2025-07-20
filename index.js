@@ -100,6 +100,7 @@ app.get("/showAll", async(req, res)=>{
 app.get("/home",(req, res)=>{
   res.render("home.ejs");
 })
-app.get("/",(req, res)=>{
-  res.render("showAll.ejs");
+app.get("/", async (req, res)=>{
+    const allImages =await Image.find({});
+  res.render("showAll.ejs", {images: allImages});
 })
