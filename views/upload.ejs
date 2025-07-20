@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/nabvar.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+   <link rel="stylesheet" href="/upload.css">
+</head>
+<body>
+         <%- include("navbar")  %>
+    <h1>Upload your photos: </h1>
+    <form action="/upload/" method="post" enctype="multipart/form-data">
+        <label for="imgupload">Please upload image</label> <br> <br>
+    <input type="file" name="imgupload" id="imgupload"> <br><br>
+     <textarea name="description" id="description" rows="10" cols="50" placeholder ="Add a Description for image"></textarea>
+    <button>Submit</button>
+
+    </form>
+</body>
+</html>

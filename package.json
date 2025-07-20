@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.16.4",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "node": "^20.19.4"
+  },
+  "type": "module"
+}

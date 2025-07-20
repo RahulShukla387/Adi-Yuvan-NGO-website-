@@ -1,0 +1,83 @@
+/* Page Heading */
+h1 {
+  margin: 2rem 0 1rem;
+  font-size: 2.2rem;
+  text-align: center;
+  color: #1f2937;
+}
+
+/* Upload Form Styling */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Label Styling */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 1.1rem;
+}
+
+/* File Input Styling */
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  background-color: #f1f5f9;
+  cursor: pointer;
+}
+
+/* Textarea Styling */
+textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  resize: vertical;
+  background-color: #f8fafc;
+  color: #111827;
+}
+
+/* Submit Button Styling */
+button {
+  display: block;
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  form {
+    padding: 1.2rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    width: 100%;
+  }
+}
