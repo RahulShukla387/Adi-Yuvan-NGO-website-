@@ -103,4 +103,3 @@ app.get("/home",(req, res)=>{
 app.get("*",(req, res)=>{
   res.render("showAll.ejs");
 })
-app.get()
