@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reports</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      margin-bottom: 40px;
+      height: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 10px;
+    }
+
+    .map-section {
+      width: 50%;
+      height: 100%;
+    }
+
+    .spacer {
+      width: 10%;
+    }
+
+    .info-section {
+      width: 40%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-container {
+      height: 60%;
+    }
+
+    .image-container img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .gap {
+      height: 5%;
+    }
+
+    .description-container {
+      height: 35%;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .map-section, .info-section, .spacer {
+        width: 100%;
+      }
+
+      .map-section {
+        height: 300px;
+        margin-bottom: 20px;
+      }
+
+      .info-section {
+        height: auto;
+      }
+
+      .gap {
+        height: 10px;
+      }
+
+      .description-container {
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Submitted Reports</h1>
+
+  <% reports.forEach((report, index) => { %>
+    <div class="container">
+      <div class="map-section" id="map-<%= index %>"></div>
+      <div class="spacer"></div>
+      <div class="info-section">
+        <div class="image-container">
+          <img src="<%= report.image %>" alt="Report Image" />
+        </div>
+        <div class="gap"></div>
+        <div class="description-container">
+          <p><strong>Latitude:</strong> <%= report.latitude %></p>
+          <p><strong>Longitude:</strong> <%= report.longitude %></p>
+          <p><strong>Description:</strong> <%= report.description %></p>
+          <p><strong>Reported At:</strong> <%= new Date(report.createdAt).toLocaleString() %></p>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const reports = <%- JSON.stringify(reports) %>;
+
+    reports.forEach((report, index) => {
+      const map = L.map(`map-${index}`).setView([report.latitude, report.longitude], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      L.marker([report.latitude, report.longitude])
+        .addTo(map)
+        .bindPopup(`<strong>${report.description}</strong><br><img src="${report.image}" width="120"/>`);
+    });
+  </script>
+
+</body>
+</html>

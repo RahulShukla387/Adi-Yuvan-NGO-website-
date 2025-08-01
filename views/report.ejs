@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Us</title>
+</head>
+<body>
+    <h2><b><i>Please help us by reporting Situation: </i></b></h2>
+    <form id="reportForm" action="/report" method="POST" enctype="multipart/form-data">
+  <input type="file" name="image" required /> <br><br>
+  <textarea name="description" placeholder="Describe the situation..." required></textarea>
+  <input type="hidden" id="latitude" name="latitude" />
+  <input type="hidden" id="longitude" name="longitude" /> <br> <br>
+  <button type="submit">Report</button>
+</form>
+
+<script>
+    let form = document.getElementById("reportForm");
+    form.addEventListener("submit", function(e){
+        e.preventDefault(); // it will stop the form to be submitted so that lon and lat can be accessed 
+    
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        document.getElementById("latitude").value = position.coords.latitude;
+        document.getElementById("longitude").value = position.coords.longitude;
+        // now after accessing location submitting the form 
+       e.target.submit();
+      },
+      (error) => {
+        console.warn("Geolocation permission denied or failed.");
+      }
+    );
+  } else {
+    console.warn("Geolocation is not supported by this browser.");
+  }
+  });
+</script>
+</body>
+</html>

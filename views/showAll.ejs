@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Acheivement</title>
     <link rel="stylesheet" href="showAll.css">
        <!-- <link rel="stylesheet" href="/navbar.css" /> -->
    <link rel="stylesheet" href="/nabvar.css">
@@ -12,18 +12,21 @@
 </head>
 <body> 
         <%- include("navbar")%>
-    <div class="imgStyle">
-    <% if(images.length == 0){ %>
-        <h1> No images being uploaded yet </h1>
-        <% }else{  images.forEach(image =>{ %>
-                <div class="img">   
-                    <img src=" <%= image.path %> " alt="Adi Yuvan foundation" >
-                    <p> <b>  <%= image.originalname  %> </b> </p>
-                      <p><b><i><u> <%= image.description  %> </u></i></b></p>
+  <% if(list.length === 0){ %>
+    <h1>No images being uploaded yet</h1>
+  <% } else {  
+    list.forEach(event => { %>
+      <h2><%= event.title %></h2>
+      <p><%= event.description %></p>
+          <div class="grid">
+              <% event.images.forEach(image => { %>
+                <div class="card">
+                  <img class="img" src="<%= image.path %> " alt="Image">
                 </div>
-      
-               <%   }) }    %>
-    </div>
+              <% }) %>
+            </div>
+  <% }) } %>
+
 </body>
 </html>
 
