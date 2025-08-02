@@ -244,7 +244,7 @@ app.get("/about", (req, res)=>{
    res.render("about.ejs");
 })
 app.get("/",   async (req, res)=>{
-  res.render("home.ejs"); 
+  res.render("about.ejs"); 
 })
 //todo User google authentication
 
