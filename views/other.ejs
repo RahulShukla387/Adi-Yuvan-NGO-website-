@@ -1,0 +1,78 @@
+
+<!-- <body>
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="/about" class="nav-link"> <i class="fa-solid fa-house"></i> Home</a>
+      <a href="/upload" class="nav-link"> <i class="fa-solid fa-upload"></i> Upload Content</a>
+      <a href="/showAll" class="nav-link">  <i class="fa-solid fa-list"></i> Show All</a>
+      <a href="/donateUs" class="nav-link">  <i class="fas fa-hand-holding-heart"></i> Donate</a>
+      <a href="/vision" class="nav-link">  <i class="fas fa-eye"></i> Vision</a>
+      <a href="/report" class="nav-link">  <i class="fas fa-exclamation-triangle"></i> Report Me</a>
+      <a href="/view/reports" class="nav-link">  <i class="fas fa-receipt"></i> See reports</a>
+      <%   if(!currUser){ %>
+        <a href="/signup" class="nav-link">  <i class="fas fa-user-plus"></i> signup</a>
+        <a href="/google" class="nav-link">  <i class="fab fa-google"></i> googleLogin</a>
+        <a href="/login" class="nav-link">  <i class="fas fa-sign-in-alt"></i> login manually</a>
+        <% } else{ %>
+        <a href="/logout" class="nav-link">  <i class="fas fa-sign-out-alt"></i> logout</a>
+         <% } %>
+    </div> -->
+  </nav> 
+
+  
+Reset some default browser styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #1f1f1f;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  position: relative;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+/* Hover effect */
+.nav-link:hover {
+  background-color: #333;
+  color: #00d4ff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+/* Responsive (stack links on small screens) */
+@media (max-width: 600px) {
+  .navbar-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-link {
+    width: 80%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+}

@@ -1,11 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Before </body> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  
+  <!-- Font Awesome (Optional if needed) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
 </head>
-<body>
-    <h1>Adi Yuvan wecome you </h1>
+
+<body class="text-white font-sans">
+
+       <%- include("navbar")%>
+
+    <!-- Mobile Hamburger -->
+    <div class="md:hidden">
+      <button onclick="toggleMobileNav()" class="text-white focus:outline-none">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+  </div>
+    <button onclick="showQR()" class="w-full text-left bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 transition">Donate</button>
+  </div>
+</header>
+
+<!-- Hero Slider -->
+<section class="relative overflow-hidden group">
+  <div class="flex transition-transform duration-1000 ease-in-out" id="sliderSlides">
+    <% const slides = [
+      { src: "https://res.cloudinary.com/dosmitdnl/image/upload/v1754121211/AdiYuvan/d922vxiw7zwqv0aaufjj.jpg", title: "Support Child Nutrition", desc: "Join our food programs this season." },
+      { src: "https://res.cloudinary.com/dosmitdnl/image/upload/v1754121252/AdiYuvan/nqcqesd0gbo8nbxfemmf.jpg", title: "Plant a Tree, Save Earth", desc: "Help us plant 10,000 trees in 2025." },
+      { src: "https://res.cloudinary.com/dosmitdnl/image/upload/v1754121252/AdiYuvan/kqibigmmj6yycamaboc3.jpg", title: "Empower Through Education", desc: "Join our movement to educate every child." }
+    ]; %>
+
+    <% slides.forEach(slide => { %>
+      <div class="min-w-full h-64 sm:h-80 md:h-96 relative slide">
+        <img src="<%= slide.src %>" alt="<%= slide.title %>" class="object-cover w-full h-full">
+        <div class="absolute bottom-5 left-5 bg-black bg-opacity-50 text-white p-4 rounded-md">
+          <h2 class="text-xl font-bold"><%= slide.title %></h2>
+          <p class="text-sm"><%= slide.desc %></p>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<!-- Mission -->
+<section class="text-center py-12">
+  <h2 class="text-4xl font-bold mb-4 text-blue-200">Our Mission</h2>
+  <p class="max-w-2xl mx-auto text-lg text-gray-100">EmpowerNGO connects communities, resources, and volunteers to drive real social change—impact you can feel.</p>
+</section>
+
+<!-- Events -->
+<section class="py-12 bg-blue-900 bg-opacity-30">
+  <div class="max-w-4xl mx-auto text-center">
+    <h3 class="text-3xl font-bold mb-6 text-blue-100">Upcoming Events</h3>
+    <div class="grid sm:grid-cols-2 gap-6">
+      <div class="bg-white bg-opacity-20 p-6 rounded shadow-md hover:bg-opacity-30 transition">
+        <h4 class="text-2xl font-semibold">Health Camp – August 2025</h4>
+        <p class="mt-1">Free medical services for 500+ villagers.</p>
+        <a href="#" class="mt-3 inline-block text-blue-200 underline">Register Now</a>
+      </div>
+      <div class="bg-white bg-opacity-20 p-6 rounded shadow-md hover:bg-opacity-30 transition">
+        <h4 class="text-2xl font-semibold">Tree Plantation – September 2025</h4>
+        <p class="mt-1">Join our green mission across 4 cities.</p>
+        <a href="#" class="mt-3 inline-block text-blue-200 underline">Get Involved</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Impact Chart -->
+<section class="py-12">
+  <div class="max-w-3xl mx-auto text-center">
+    <h3 class="text-3xl font-bold mb-4 text-blue-100">Our 2025 Impact</h3>
+    <canvas id="impactChart" class="bg-white rounded shadow-md p-4"></canvas>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center py-6 bg-white bg-opacity-10 backdrop-blur-md text-blue-200">
+  <p>&copy; <%= new Date().getFullYear() %> EmpowerNGO. All rights reserved.</p>
+</footer>
+
+<!-- QR Modal -->
+<div id="qrModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="bg-white text-black rounded-lg p-6 w-full max-w-sm relative">
+    <h4 class="text-xl font-bold mb-4 text-center">Scan to Donate</h4>
+    <img src="https://res.cloudinary.com/dosmitdnl/image/upload/v1754122773/AdiYuvan/ks5oy6yheklp1egklnyk.jpg" alt="Donation QR" class="mx-auto mb-4 rounded-md shadow-md h-64 w-64 object-contain">
+    <p class="text-center text-sm text-gray-600 mb-4">Use UPI apps like Google Pay, PhonePe or Paytm to donate.</p>
+    <button onclick="hideQR()" class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl font-bold">&times;</button>
+  </div>
+</div>
+
+<!-- JS: Slider -->
+<script>
+  let slideIndex = 0;
+  const slides = document.getElementById('sliderSlides');
+  const totalSlides = slides.children.length;
+
+  function showSlide(index) {
+    slideIndex = (index + totalSlides) % totalSlides;
+    slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+  }
+
+  function nextSlide() { showSlide(slideIndex + 1); }
+  function prevSlide() { showSlide(slideIndex - 1); }
+
+  setInterval(nextSlide, 5000);
+</script>
+
+<!-- JS: Chart -->
+<script>
+  const ctx = document.getElementById('impactChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [{
+        label: 'People Helped',
+        data: [320, 450, 600, 740, 680, 800],
+        backgroundColor: 'rgba(0, 123, 255, 0.8)',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { color: '#333' }, grid: { color: '#eee' } },
+        x: { ticks: { color: '#333' }, grid: { display: false } }
+      }
+    }
+  });
+</script>
+
+<!-- JS: QR and Mobile Nav Toggle -->
+<script>
+  function showQR() {
+    document.getElementById("qrModal").classList.remove("hidden");
+  }
+
+  function hideQR() {
+    document.getElementById("qrModal").classList.add("hidden");
+  }
+
+  function toggleMobileNav() {
+    document.getElementById("mobileNav").classList.toggle("hidden");
+  }
+</script>
+
 </body>
 </html>

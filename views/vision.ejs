@@ -1,15 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vision</title>
-     <link rel="stylesheet" href="/nabvar.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vision</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #FF9F00;
+      overflow-x: hidden;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding-top: 80px;
+      box-sizing: border-box;
+    }
+
+    .vision-sheet {
+      width: 90%;
+      max-width: 900px;
+      padding: 60px;
+      background-color: #FFFFFF;
+      box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .vision-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .pattern {
+      flex: 1;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .image {
+      flex-shrink: 0;
+    }
+
+    .image img {
+      width: 300px;
+      height: 200px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .vision-container {
+        flex-direction: column;
+      }
+
+      .image img {
+        width: 100%;
+        height: auto;
+      }
+
+      .pattern {
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
-         <%- include("navbar")  %>
-    <h1>Adi Yuvan Youth Foundation have vision: </h1>
+  <!-- Navbar stays on top -->
+  <%- include("navbar") %>
+
+  <!-- Main content comes below -->
+  <main>
+    <div class="vision-sheet">
+      <h1>Your Vision</h1>
+
+      <div class="vision-container">
+        <div class="pattern">
+          At MYNGO, our vision is to build a world where every individual has the opportunity,
+          resources, and support to live a life of dignity, purpose, and fulfillment. We strive to create
+          lasting impact through community-driven initiatives, empowering people to rise above challenges
+          and contribute to a more just, equitable, and compassionate society.
+        </div>
+
+        <div class="image">
+          <img src="https://res.cloudinary.com/dosmitdnl/image/upload/v1754122773/AdiYuvan/xfvyxg38menwe1w8zeew.jpg" alt="Vision Image" />
+        </div>
+      </div>
+    </div>
+  </main>
 </body>
 </html>

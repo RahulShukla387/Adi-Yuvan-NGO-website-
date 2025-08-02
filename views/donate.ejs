@@ -1,15 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help People</title>
-    <link rel="stylesheet" href="/nabvar.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help People</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 </head>
-<body>
-    <%- include("navbar")  %>
-     <h1> This service will appear soon ! </h1>
+
+<body class="bg-warning" style="min-height: 100vh; margin: 0; padding: 0;">
+  <!-- ✅ Navbar always at the top -->
+  <%- include("navbar") %>
+
+  <!-- ✅ Main Content Area -->
+  <main class="d-flex flex-column align-items-center justify-content-center" style="min-height: calc(100vh - 60px); padding-top: 80px;">
+    <div class="text-center">
+      <h1>Help Others by Your contribution </h1>
+      <h2><i>Your Small contribution can make someone's day  </i></h2>
+
+      <!-- Donate Button -->
+      <button onclick="showQR()" class="btn btn-primary mt-4 px-4 py-2">
+        Donate
+      </button>
+    </div>
+  </main>
+
+  <!-- ✅ QR Modal -->
+  <div id="qrModal" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center d-none" style="z-index: 1050;">
+    <div class="bg-white text-black rounded p-4 position-relative" style="max-width: 400px; width: 100%;">
+      <h4 class="text-center fw-bold mb-3">Scan to Donate</h4>
+      <img src="https://res.cloudinary.com/dosmitdnl/image/upload/v1754122773/AdiYuvan/ks5oy6yheklp1egklnyk.jpg" alt="Donation QR" class="img-fluid rounded shadow mb-3" />
+      <p class="text-center text-muted small">Use UPI apps like Google Pay, PhonePe or Paytm to donate.</p>
+      <button onclick="hideQR()" class="btn-close position-absolute top-0 end-0 m-2"></button>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modal Toggle Script -->
+  <script>
+    function showQR() {
+      document.getElementById("qrModal").classList.remove("d-none");
+    }
+
+    function hideQR() {
+      document.getElementById("qrModal").classList.add("d-none");
+    }
+  </script>
 </body>
 </html>
