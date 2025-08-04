@@ -421,7 +421,7 @@ app.get("/reset/:token", async (req, res) => {
 
   if (!user) return res.send("Token expired or invalid");
 
-  res.render("resetPassword.ejs", { token: req.params.token });
+  res.render("resetPassword.ejs", { token: req.params.token , username: user.username});
 });
 // post request of reset the token 
 app.post("/reset/:token", async (req, res) => {
