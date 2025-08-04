@@ -1,0 +1,56 @@
+# Query: session
+# ContextLines: 1
+
+15 results - 4 files
+
+index.js:
+  42  
+  43: //todo Importing the session and passport for authentication.
+  44: import session from "express-session";
+  45  import passport from "passport";
+
+  48  import User from "./models/user.js";
+  49: app.use(session({
+  50    secret: process.env.secretKey,
+   
+
+  55  app.use(passport.initialize());
+  56: app.use(passport.session());
+  57  
+
+package-lock.json:
+   12          "express": "^5.1.0",
+   13:         "express-session": "^1.18.2",
+   14          "method-override": "^3.0.0",
+
+  672      },
+  673:     "node_modules/express-session": {
+  674        "version": "1.18.2",
+  675:       "resolved": "https://registry.npmjs.org/express-session/-/express-session-1.18.2.tgz",
+  676        "integrity": "sha512-SZjssGQC7TzTs9rpPDuUrR23GNZ9+2+IkA/+IJWmvQilTr5OSliEHGF+D9scbIpdC6yGtTI0/VhaHoVes2AN/A==",
+
+  691      },
+  692:     "node_modules/express-session/node_modules/cookie-signature": {
+  693        "version": "1.0.7",
+
+  697      },
+  698:     "node_modules/express-session/node_modules/debug": {
+  699        "version": "2.6.9",
+
+  706      },
+  707:     "node_modules/express-session/node_modules/ms": {
+  708        "version": "2.0.0",
+
+package.json:
+  7      "express": "^5.1.0",
+  8:     "express-session": "^1.18.2",
+  9      "method-override": "^3.0.0",
+
+config\userConfig.js:
+   8  
+   9: // Serialize user into session
+  10  passport.serializeUser((user, done) => {
+
+  13  
+  14: // Deserialize user from session
+  15  passport.deserializeUser(async (id, done) => {

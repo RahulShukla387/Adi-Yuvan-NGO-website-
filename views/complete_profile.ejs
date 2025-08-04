@@ -6,7 +6,8 @@
     <title>Signup</title>
 </head>
 <body>
-    <h1>  Welcome in world of service ! </h1> 
+    <h1>  Welcome in world of service ! </h1>
+    <h2><b><i> Please set a username and password </i></b></h2> 
      <!-- views/signup.ejs -->
 <!DOCTYPE html>
 <html lang="en">
@@ -15,13 +16,13 @@
   <title>Signup</title>
 </head>
 <body>
-  <form action="/signup" method="POST">
+  <form action="/complete/profile" method="POST">
     <input type="text" name="username" id="username" placeholder="Enter username" required /><br /><br />
     <input type="password" name="password" id="password" placeholder="Enter password" required /><br /><br />
-    <button type="submit">Sign Up</button>
+    <button type="submit">submit</button> <br> <br>
+     <a href="/forget"> Forget password </a>
   </form>
 </body>
 </html>
-
 </body>
 </html>

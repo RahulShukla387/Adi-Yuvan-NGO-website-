@@ -23,7 +23,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
+ 
 //setting ejs templating engine
 app.set("view engine", "ejs");
 //setting views directory
@@ -31,6 +31,8 @@ app.set("views", path.join(__dirname, "views"));
 // Serving static files(css, js, images, etc.)
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true })); // for taking the parameter from req.body;
+import methodOverride from "method-override";
+app.use(methodOverride('_method'));
 //todo Adding the cloudinary;
 
 import {storage} from "./config/cloudinary.js";
@@ -40,18 +42,19 @@ import { cloudinary } from "./config/cloudinary.js";
 import multer from "multer";
 import fs from "fs";
 import { v4 as uuidv4 } from 'uuid';
-
+import crypto from "crypto";
 //todo Importing the session and passport for authentication.
 import session from "express-session";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import userConfig from "./config/userConfig.js";
 import  "./config/userConfig.js";
-import {User, GoogleAut} from "./models/user.js";
-// import googleAuth from "./config/googleAuth.js"; 
+import {User} from "./models/user.js";
+import { isAdmin, isLoggedIn } from "./config/middleware.js";
 //todo instead of above line i directly import googleAuth.
-import "./config/googleAuth.js";
 import { profile } from "console";
+import { title } from "process";
+import {transporter} from "./config/nodemailer.js";
 app.use(session({
   secret: process.env.secretKey,
   resave: false,
@@ -63,57 +66,6 @@ app.use(passport.session());
 
 //todo Starting code;
 
-//todo Creating the login and logout route and isLoggedIN authentication.
-//todo Signup
- app.get("/signup", (req, res)=>{
-  res.render("signup.ejs");
- })
-  app.post("/signup",async (req, res, next) =>{
-    try{
-
-      const {username, password} = req.body;
-         const isUserExist = await User.findOne({username});
-          if(isUserExist){
-            console.log("user already exist ");
-            res.redirect("/signup");
-          }else{
-
-            const newUser = new User ({username, password});
-            await newUser.save();
-             req.login(newUser , (err) =>{
-               if(err) return next(err);
-               console.log(req.user);
-               return res.redirect("/");
-             });
-          }
-    }
-    catch(err){
-      console.log("Signup error: ", err);
-      res.redirect("/signup");
-    }
-  })
-//todo Login 
-app.get("/login", (req, res)=>{
-   res.render("login.ejs");
-});
-
-app.post("/login", passport.authenticate("local", {
-  successRedirect: "/",
-  failureRedirect: "/login",
-  // failureFlash: true,
-}));
-//logout
-app.get("/logout", (req, res)=>{
-  req.logOut(err => {
-      if(err) return next(err);
-      res.redirect("/vision");
-  })
-})
-//isLoggedIn() authentication.
-function isLoggedIn(req, res, next){
-  if(req.isAuthenticated()) return next();
-  res.redirect("/login");
-}
 
 //todo Middleware so that req.user be sent to navbar.ejs template,
 
@@ -122,16 +74,19 @@ app.use((req, res, next)=>{
   next();
 });
 
+//todo Promoting AdiYuvan as admin 
+//  await User.findOneAndUpdate({email: "adiyuvanfoundation@gmail.com"},{role: "admin"});
+
 //todo Adding photos on cloudinary
 const upload = multer({storage :storage});
 
 
 //upload 
-app.get("/upload", async(req, res)=>{
+app.get("/upload",isAdmin, async(req, res)=>{
     res.render("upload.ejs");
 })
 let lastUsedUUID = null;
-app.post("/upload", upload.array("imgupload", 20), async(req, res)=>{
+app.post("/upload", isAdmin, upload.array("imgupload", 20), async(req, res)=>{
   if(!req.files){
     return res.status(400).send("No file uploaded");
   }
@@ -206,10 +161,10 @@ app.get("/showAll", async(req, res)=>{
     res.render("donate.ejs");
  })
  //todo Report Us the problem 
- app.get("/report", (req, res)=>{
+ app.get("/report",isLoggedIn, (req, res)=>{
    res.render("report.ejs");
  })
-app.post("/report", upload.single("image"), async (req, res) => {
+app.post("/report",isLoggedIn, upload.single("image"), async (req, res) => {
   // console.log(req.file); // Cloudinary image info
   // console.log(req.body); // latitude, longitude, description, etc.
   // Now save req.file.path (image URL), req.body.latitude, req.body.longitude to MongoDB
@@ -227,7 +182,7 @@ app.post("/report", upload.single("image"), async (req, res) => {
   res.send("Report submitted!");
 });
  //todo See reports 
-  app.get("/view/reports", async(req, res)=>{
+  app.get("/view/reports",isAdmin, async(req, res)=>{
      try {
     const reports = await Report.find({});
     res.render("viewReports.ejs", { reports });
@@ -246,21 +201,260 @@ app.get("/about", (req, res)=>{
 app.get("/",   async (req, res)=>{
   res.render("about.ejs"); 
 })
+
+//todo Promoting as admin 
+app.get("/admin/promote", isAdmin, (req, res) => {
+  res.render("admin.ejs", { user: req.user });
+});
+
+// Promote another user
+app.post("/admin/promote", isAdmin, async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.send("User not found");
+    user.role = "admin";
+    await user.save();
+
+    res.send(`${email} is now an admin.`);
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+});
+
+//todo edit and delete route
+ app.get("/edit/showAll/:id", isLoggedIn, isAdmin, async(req, res)=>{
+const id = req.params.id;
+  let toEdit = await groupImage.findById(id);
+    if(!toEdit){
+      console.log("no list had found");
+    }
+    else{
+      res.render("editShowAll.ejs", {list: toEdit, id});
+    }
+ })
+app.patch("/edit/showAll/:id",isLoggedIn, isAdmin, async (req, res)=>{
+  const id = req.params.id;
+   let {description, title} = req.body;
+      await groupImage.findByIdAndUpdate(id, {description, title});
+      res.redirect("/showAll");
+})
+
+//todo function extractPublicId
+
+function extractPublicId(imagePath) {
+  // Assuming the Cloudinary URL looks like:
+  // https://res.cloudinary.com/demo/image/upload/v1234567890/folder/filename.jpg
+
+  const parts = imagePath.split('/');
+  const filenameWithExtension = parts[parts.length - 1]; // e.g., filename.jpg
+  const filename = filenameWithExtension.split('.')[0];  // e.g., filename
+  return filename; // This is usually your public_id (if you're not using folders)
+}
+
+
+//Deleting image in showall
+app.delete("/delete/showAll/:imageId", isLoggedIn, isAdmin, async (req, res) => {
+  const { imageId } = req.params;
+  // Find the document containing the image
+  const parentDoc = await groupImage.findOne({ "images._id": imageId });
+
+  if (!parentDoc) {
+    return res.status(404).send("Image not found");
+  }
+  // Optional: Delete from Cloudinary if needed
+  const imageToDelete = parentDoc.images.id(imageId);
+  const cloudinaryPublicId = extractPublicId(imageToDelete.path); // Write a function to extract public_id if needed
+  await cloudinary.uploader.destroy(cloudinaryPublicId);
+  // Pull the image from the array
+  await groupImage.updateOne(
+    { _id: parentDoc._id },
+    { $pull: { images: { _id: imageId } } }
+  );
+  res.redirect("/showAll");
+});
+app.delete("/dlt/showAll/:id", isLoggedIn, isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const group = await groupImage.findById(id);
+
+  if (!group) {
+    req.flash("error", "Event not found");
+    return res.redirect("/showAll");
+  }
+
+  // Delete images from Cloudinary
+  for (let img of group.images) {
+    if (img.filename) {
+       const publicId = extractPublicId(img.path);
+      await cloudinary.uploader.destroy(publicId);
+    }
+  }
+
+  // Delete the event from MongoDB
+  await groupImage.findByIdAndDelete(id);
+
+  res.redirect("/showAll");
+});
+
+//todo Deleting the indivisual report of reports 
+app.delete("/view/reports/dlt/:id", isLoggedIn, isAdmin, async(req, res)=>{
+   const {id} = req.params;
+    let toDlt = await Report.findById(id);
+    if(!toDlt) res.send("Report does not exist");
+    else console.log(toDlt);
+      const publicId = extractPublicId(toDlt.image);
+      await cloudinary.uploader.destroy(publicId);
+       await Report.findByIdAndDelete(id);
+       res.redirect("/view/reports");
+})
+
+//todo Deletiing Promote Admin
+
+app.get("/remove/admin", isLoggedIn, isAdmin, async(req, res) =>{
+  res.render("removeAdmin.ejs");
+})
+app.post("/remove/admin", isLoggedIn, isAdmin, async (req, res)=>{
+ try {
+   let {email} = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.send("User not found");
+     if(user && user.role == "admin"){
+       user.role = "user";
+       await user.save();
+       res.send(`${email} is removed from admin post.`);
+     }
+      else{
+        res.send("User is already not a admin ");
+      }
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+});
+
+
 //todo User google authentication
 
-//todo Start Google OAuth
+//todo Start Google OAuth and local login 
+// Show form
+app.get("/complete/profile", isLoggedIn, (req, res) => {
+  // If user already has password and username, skip
+  if (req.user.password && req.user.username) {
+    return res.redirect("/");
+  }
+  res.render("complete_profile.ejs");
+});
+
+// Handle form submission
+app.post("/complete/profile", isLoggedIn, async (req, res) => {
+  const { username, password } = req.body;
+
+  const existing = await User.findOne({ username });
+  if (existing) {
+    return res.redirect("/complete/profile"); // or show message
+  }
+
+  req.user.username = username;
+  req.user.password = password; // Will be hashed in schema
+  await req.user.save();
+
+  res.redirect("/");
+});
+
+
+// Login Page
+app.get("/login", (req, res) => {
+  if (req.isAuthenticated()) return res.redirect("/");
+  res.render("login.ejs");
+});
+
+// Handle Local Login
+app.post("/login", passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/login"
+}));
+
+// Logout
+app.get("/logout", async (req, res, next) => {
+    await req.logout((err)=>{
+      if(err) return next(err);
+      res.redirect("/vision");
+    });
+});
+ //todo reset password forget password
+
+ app.get("/forget", (req, res) => {
+  res.render("forget.ejs");
+});
+// generating token and sending it to user email
+
+app.post("/forget", async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) return res.send("No user found with that email");
+
+  const token = crypto.randomBytes(20).toString("hex");
+
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
+  await user.save();
+
+  const resetLink = `http://${req.headers.host}/reset/${token}`;
+
+  await transporter.sendMail({
+    to: user.email,
+    from: process.env.AMAIL_ID,
+    subject: "Password Reset Link",
+    html: `Click <a href="${resetLink}">here</a> to reset your password.`
+  });
+
+  res.send("Reset link sent to your email.");
+});
+
+// reset the token the password
+
+app.get("/reset/:token", async (req, res) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) return res.send("Token expired or invalid");
+
+  res.render("resetPassword.ejs", { token: req.params.token });
+});
+// post request of reset the token 
+app.post("/reset/:token", async (req, res) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) return res.send("Token expired or invalid");
+
+  user.password = req.body.password; // Will be auto-hashed via pre-save hook
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+
+  await user.save();
+  res.send("Password updated. You can now log in.");
+});
+
+
+// Google Auth Start
 app.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-// Callback route
- app.get(
-  "/auth/google/callback",
+// Google Auth Callback
+app.get("/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/google",
+    failureRedirect: "/login",
   }),
   (req, res) => {
-    // Successful auth
-    console.log("google profile is: ", profile);
-    res.redirect("/"); // or wherever you want
+    if (!req.user.password) {
+      return res.redirect("/complete/profile"); // A route
+    }
+    res.redirect("/");
   }
 );
+
 

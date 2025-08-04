@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>editShowAll</title>
+</head>
+<body>
+    <h1><i>Edit the event </i></h1>
+    <form action="/edit/showAll/<%= id%>?_method=PATCH" method="post">
+         <textarea name="title" id="title"><%= list.title %></textarea> <br> <br>
+        <textarea name="description" id="description" rows="10" cols="50" placeholder ="Add a Description for image"> <%= list.description  %></textarea> <br> <br>
+         <input type="submit" name="" id="" placeholder="update">
+    </form>
+</body>
+</html>

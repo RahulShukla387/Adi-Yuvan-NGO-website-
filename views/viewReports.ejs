@@ -98,6 +98,9 @@
   <h1>Submitted Reports</h1>
 
   <% reports.forEach((report, index) => { %>
+    <form action="/view/reports/dlt/<%= report._id %>?_method=DELETE " method="post">
+      <button type="submit"> delete report </button>
+    </form>
     <div class="container">
       <div class="map-section" id="map-<%= index %>"></div>
       <div class="spacer"></div>

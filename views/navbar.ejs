@@ -7,6 +7,7 @@
 
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <% if(currUser && currUser.role == "admin"){ %>
         <li class="nav-item"><a class="nav-link" href="/about"><i class="fa-solid fa-house"></i> Home</a></li>
         <li class="nav-item"><a class="nav-link" href="/upload"><i class="fa-solid fa-upload"></i> Upload</a></li>
         <li class="nav-item"><a class="nav-link" href="/showAll"><i class="fa-solid fa-list"></i> Show All</a></li>
@@ -14,11 +15,19 @@
         <li class="nav-item"><a class="nav-link" href="/vision"><i class="fas fa-eye"></i> Vision</a></li>
         <li class="nav-item"><a class="nav-link" href="/report"><i class="fas fa-exclamation-triangle"></i> Report Me</a></li>
         <li class="nav-item"><a class="nav-link" href="/view/reports"><i class="fas fa-receipt"></i> See Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="/admin/promote"> <i class="fas fa-user-tie"></i> Promote to Admin </a></li>
+        <li class="nav-item"><a class="nav-link" href="/remove/admin"> <i class="fas fa-user-tie"></i> Remove from Admin </a></li>
       </ul>
-
+        <% } else { %>
+        <li class="nav-item"><a class="nav-link" href="/about"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/showAll"><i class="fa-solid fa-list"></i> Show All</a></li>
+        <li class="nav-item"><a class="nav-link" href="/donateUs"><i class="fas fa-hand-holding-heart"></i> Donate</a></li>
+        <li class="nav-item"><a class="nav-link" href="/vision"><i class="fas fa-eye"></i> Vision</a></li>
+        <li class="nav-item"><a class="nav-link" href="/report"><i class="fas fa-exclamation-triangle"></i> Report Me</a></li>
+          
+           <% } %>
       <ul class="navbar-nav">
         <% if (!currUser) { %>
-          <li class="nav-item"><a class="nav-link" href="/signup"><i class="fas fa-user-plus"></i> Signup</a></li>
           <li class="nav-item"><a class="nav-link" href="/google"><i class="fab fa-google"></i> Google Login</a></li>
           <li class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
         <% } else { %>

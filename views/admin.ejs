@@ -1,0 +1,6 @@
+<h1>Welcome Admin <%= user.username %></h1>
+
+<form action="/admin/promote" method="POST">
+  <input type="email" name="email" placeholder="User Email to Promote" required />
+  <button type="submit">Promote to Admin</button>
+</form>
