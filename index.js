@@ -43,6 +43,15 @@ import multer from "multer";
 import fs from "fs";
 import { v4 as uuidv4 } from 'uuid';
 import crypto from "crypto";
+
+//todo connecting with frontend 
+import cors from "cors";
+app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173',  // Change to the URL of your frontend if deployed
+  credentials: true,               // Enable cookies or credentials if needed
+}));
+
 //todo Importing the session and passport for authentication.
 import session from "express-session";
 import passport from "passport";
