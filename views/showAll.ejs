@@ -19,10 +19,12 @@
     <h1>No images being uploaded yet</h1>
   <% } else {  
     list.forEach(event => { %>
-      <form action="/dlt/showAll/<%= event._id %>?_method=DELETE" method="post"> <br> <br>
-        <input type="submit" name="" id="" value="dlt event">
-        </form>
-        <a href="/edit/showAll/<%= event._id %>"> edit event</a> 
+     <% if( currUser && currUser.role == "admin"){ %>
+        <form action="/dlt/showAll/<%= event._id %>?_method=DELETE" method="post"> <br> <br>
+          <input type="submit" name="" id="" value="dlt event">
+          </form>
+          <a href="/edit/showAll/<%= event._id %>"> edit event</a> 
+      <% }%>
       <h2><%= event.title %></h2>
       <p><%= event.description %></p>
           <div class="grid">
@@ -30,7 +32,9 @@
                 <div class="card">
                   <img class="img" src="<%= image.path %> " alt="Image">
                   <form action="/delete/showAll/<%= image._id %>?_method=DELETE" method="post">
-                     <button type="submit"> delete Image</button>
+                     <% if( currUser && currUser.role == "admin"){ %>
+                      <button type="submit"> delete Image</button>
+             <% }%>
                     </form>   
                 </div>
               <% }) %>
